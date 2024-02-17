@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .content
+        h1.page-title Edit Rental Property
+        form(method="post" action="/admin/rent/edit")
+            input(type="hidden" name="rentId" value=editRent._id)
+
+            div
+                label(for="image") Image:
+                input(type="text" name="image" value=editRent.image)
+            div
+                label(for="price") Price:
+                input(type="text" name="price" value=editRent.price)
+            div
+                label(for="address") Address:
+                input(type="text" name="address" value=editRent.address)
+            div
+                label(for="detailsLink") Details Link:
+                input(type="text" name="detailsLink" value=editRent.detailsLink)
+
+            button(type="submit") Update

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+    h1.page-title  Sale Admin Portal
+    .container
+        .block
+            a(href="/admin/sale/add") Add new sale
+    table 
+        thead 
+            tr 
+                th Listing
+                th Operation 
+        tbody 
+            each property in listings 
+                tr
+                    td 
+                        img(src=property.image, alt="Property Image" style="width: 200px; height: 200px;")
+                        br
+                        |  #{property.address}
+                    td
+                        form(action="/admin/sale/delete")
+                            input(type="hidden" name="propertyId" value=property._id)
+                            button(type="submit") Delete
+                        form(action="/admin/sale/edit")
+                            input(type="hidden" name="propertyId" value=property._id) 
+                            button(type="submit") Edit
+    .container
+        .block
+            a(href='/admin') Back to Admin Portal

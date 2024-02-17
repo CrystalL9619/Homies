@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  .property-container
+    each rent in rents
+      .property
+        img(src=rent.image, alt=rent.address)
+        p Price: #{rent.price}
+        p Address: #{rent.address}
+        a(href=rent.detailsLink) Details

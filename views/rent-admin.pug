@@ -1,0 +1,29 @@
+extends layout
+
+block content
+    h1.page-title Rent Admin Portal
+    .container
+        .block
+            a(href="/admin/rent/add") Add new rental
+    table
+        thead
+            tr
+                th Rental
+                th Operation
+        tbody
+            each rent in rentals
+                tr
+                    td
+                        img(src=rent.image, alt="Rental Property Image" style="width: 200px; height: 200px;")
+                        br
+                        | #{rent.address}
+                    td
+                        form(action="/admin/rent/delete")
+                            input(type="hidden" name="rentId", value=rent._id)
+                            button(type="submit") Delete
+                        form(action="/admin/rent/edit")
+                            input(type="hidden" name="rentId" value=rent._id)
+                            button(type="submit") Edit
+    .container
+        .block
+            a(href='/admin') Back to Admin Portal

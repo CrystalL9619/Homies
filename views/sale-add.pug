@@ -1,0 +1,19 @@
+extends layout 
+block content
+    .content 
+        h1.page-title Add sale 
+        form(method ="post" action="/admin/sale/add/submit")
+            div 
+                label(for="image") Image: 
+                input(type="text" id="href" name="image")
+            div 
+                label(for="price") Price : 
+                input(type="text" name="price")
+            div 
+                label(for="address") Address: 
+                input(type="text" name="address")
+            div 
+                label(for="detailsLink") detailsLink: 
+                input(type="text" id="href" name="detailsLink")
+
+            button(type="submit") Add 

@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  .property-container
+    each property in properties
+      .property
+        img(src=property.image, alt=property.address)
+        p Price: #{property.price}
+        p Address: #{property.address}
+        a(href=property.detailsLink) Details

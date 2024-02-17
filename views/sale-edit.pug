@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .content
+        h1.page-title Edit Sale
+        form(method="post" action="/admin/sale/edit")
+            input(type="hidden" name="propertyId" value=editProperty._id)
+
+            div
+                label(for="image") Image:
+                input(type="text" name="image" value=editProperty.image)
+            div
+                label(for="price") Price:
+                input(type="text" name="price" value=editProperty.price)
+            div
+                label(for="address") Address:
+                input(type="text" name="address" value=editProperty.address)
+            div
+                label(for="detailsLink") Details Link:
+                input(type="text" name="detailsLink" value=editProperty.detailsLink)
+
+            button(type="submit") Update
