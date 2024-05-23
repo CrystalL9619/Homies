@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    h1 Mortgage Calculator
+    form(method ="post" action="/mortgage")
+        .formelement
+            label(for="loanAmount") Loan Amount : $ 
+            input(type="number" id="loanAmount" name="loanAmount" placeholder="300000",required)
+        .formelement
+            label(for="interestRate") Interest Rate (For example: rate: 4.75%, please enter 0.0475):
+            input(type="number" id="interestRate" name="interestRate" step="0.0001" placeholder="0.0475", required)
+        .formelement
+            label(for="loanTerm") Loan Term (months) : 
+            input(type="number" id="loanTerm" name="loanTerm" placeholder="360" required)
+        .formelement
+            button(type="submit") Calculate
+
+    h2 Monthly Payment
+    p $#{monthlyPayment}

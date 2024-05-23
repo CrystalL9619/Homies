@@ -12,6 +12,8 @@ const flash = require("express-flash");
 const initPassport = require("./passport-config");
 const methodOverride = require("method-override");
 pageRouter.use(methodOverride("_method"));
+const mortgageCalculator = require("./mortgage");
+
 initPassport(
   passport,
   async (email) => model.checklogin(email),
@@ -39,14 +41,6 @@ pageRouter.get("/login", checkNotAuthenticated, (req, res) => {
 pageRouter.get("/register", checkNotAuthenticated, async (req, res) => {
   res.render("register");
 });
-pageRouter.get("/sale", async (req, res) => {
-  let properties = await listings.getProperties();
-  res.render("sale", { properties });
-});
-pageRouter.get("/rent", async (req, res) => {
-  let rents = await rentals.getRents();
-  res.render("rent", { rents });
-});
 pageRouter.post("/register/submit", checkNotAuthenticated, async (req, res) => {
   try {
     console.log("Password received:", req.body.password);
@@ -73,6 +67,22 @@ pageRouter.post(
     failureFlash: true,
   })
 );
+pageRouter.get("/sale", async (req, res) => {
+  let properties = await listings.getProperties();
+  res.render("sale", { properties });
+});
+pageRouter.get("/rent", async (req, res) => {
+  let rents = await rentals.getRents();
+  res.render("rent", { rents });
+});
+pageRouter.get("/mortgage", (req, res) => {
+  res.render("mortgage");
+});
+
+pageRouter.post("/mortgage", (req, res) => {
+  const { loanAmount, interestRate, loanTerm } = req.body;
+  mortgageCalculator(loanAmount, interestRate, loanTerm, res);
+});
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {

@@ -17,10 +17,11 @@ body {
   padding: 0 20px;
   display: flex;
   align-items: start;
+  flex-wrap: wrap;
 }
 .main {
   margin: auto;
-  flex: 1;
+
   display: flex;
   flex-direction: column;
 }
@@ -73,6 +74,7 @@ h3 {
   color: #333;
 }
 img {
+  max-width: 100%;
   width: fit-content;
   height: auto;
   padding: 10px;
@@ -83,6 +85,8 @@ img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  position: absolute;
+  top: 90%;
 }
 .property {
   width: calc(33.33% - 20px);
@@ -100,7 +104,8 @@ img {
 nav {
   background-color: rgb(38, 102, 38);
   color: #fff;
-  padding: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 nav a {
@@ -126,6 +131,25 @@ footer {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
+#searchBar {
+  margin: 20px;
+}
+#map {
+  position: absolute;
+  top: auto;
+  left: auto;
+  width: 90%;
+  height: 50%;
+  margin: 5%;
+}
+
+.formelement {
+  margin: 20px;
+}
+.button {
+  margin: 20px;
+}
+
 @media screen and (max-width: 890px) {
   .main {
     margin: 0;

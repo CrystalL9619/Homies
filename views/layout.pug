@@ -3,6 +3,9 @@ html
   head
     title Homie App
     link(rel="stylesheet" type="text/css" href="/css/styles.css")
+    script(src="/js/common.js")
+    //- script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkC-ET8CAIbHDgLfT9Wagi3p_1TE--EWY&callback=initMap")
+    script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4nz0AtatqrLbeGztbb497pwBe5LcimmM&libraries=places")
   body
     .header
       h1 Homie
@@ -16,9 +19,16 @@ html
           a(href='/login') Login 
         a(href='/admin') Admin Portal
     nav
-      a(href='/') Home
-      a(href='/sale') Sale
-      a(href='/rent') Rent
+      ul
+        a(href='/') Home
+        a(href='/sale') Sale
+        a(href='/rent') Rent
+      input.search(
+      type='text'
+      name='search'
+      id='searchBar'
+      placeholder='Search for a Location '
+      )
     block content
   footer
     p © 2024 Homie App. All rights reserved.
