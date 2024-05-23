@@ -7,8 +7,13 @@ html
     .header
       h1 Homie
       ul 
-        a(href='/') SIGN IN
-        a(href='/') SIGN UP
+        if user
+          li Hi! #{user.username}
+          li
+            a(href='/logout?_method=DELETE') Logout
+        else
+          li
+          a(href='/login') Login 
         a(href='/admin') Admin Portal
     nav
       a(href='/') Home

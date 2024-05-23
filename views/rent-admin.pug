@@ -14,9 +14,9 @@ block content
             each rent in rentals
                 tr
                     td
-                        img(src=rent.image, alt="Rental Property Image" style="width: 200px; height: 200px;")
-                        br
                         | #{rent.address}
+                        br
+                        img(src=rent.image, alt="Rental Property Image" style="width: 200px; height: 200px;")                       
                     td
                         form(action="/admin/rent/delete")
                             input(type="hidden" name="rentId", value=rent._id)

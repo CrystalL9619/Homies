@@ -1,0 +1,14 @@
+h1 Login
+if messages.error
+    p #{messages.error}
+form(method="post" action="/login/submit")
+    div
+        label(for="email") Email:
+        input(type="email" id="email" name="email" required)
+    div
+        label(for="password") Password:
+        input(type="password" id="password" name="password" required)
+    button(type="submit") Login
+
+p Not a member yet?
+a(href="/register") Register

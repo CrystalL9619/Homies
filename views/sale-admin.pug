@@ -14,9 +14,9 @@ block content
             each property in listings 
                 tr
                     td 
-                        img(src=property.image, alt="Property Image" style="width: 200px; height: 200px;")
-                        br
                         |  #{property.address}
+                        br
+                        img(src=property.image, alt="Property Image" style="width: 200px; height: 200px;")
                     td
                         form(action="/admin/sale/delete")
                             input(type="hidden" name="propertyId" value=property._id)
