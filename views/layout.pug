@@ -9,26 +9,35 @@ html
   body
     .header
       h1 Homies
-      ul 
+      ul
         if user
           li Hi! #{user.username}
           li
-            a(href='/logout?_method=DELETE') Logout
+            a(href='#' onclick='submitLogoutForm()') Logout
+            form#logout-form(action='/logout?_method=DELETE' method='POST' style='display: none;')
+          if user.role === 'admin'
+            li
+              a(href='/admin') Admin Portal
         else
           li
-          a(href='/login') Login 
-        a(href='/admin') Admin Portal
-    nav
-      ul
-        a(href='/') Home
-        a(href='/sale') Sale
-        a(href='/rent') Rent
-      input.search(
-      type='text'
-      name='search'
-      id='searchBar'
-      placeholder='Search for a Location '
-      )
-    block content
+            a(href='/login') Login
+  nav
+    ul
+      a(href='/') Home
+      a(href='/sale') Sale
+      a(href='/rent') Rent
+    input.search(
+    type='text'
+    name='search'
+    id='searchBar'
+    placeholder='Search for a Location '
+    )
+  block content
   footer
     p © 2024 Homie App. All rights reserved.
+
+
+  script.
+    function submitLogoutForm() {
+      document.getElementById('logout-form').submit();
+    }

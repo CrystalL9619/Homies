@@ -14,6 +14,7 @@ async function connection() {
 async function register(newUser) {
   try {
     db = await connection();
+    newUser.role = newUser.role || "user";
     const result = await db.collection("Account").insertOne(newUser);
     return result;
   } catch (error) {
@@ -31,9 +32,22 @@ async function checklogin(email) {
     throw error;
   }
 }
+async function checkloginById(id) {
+  try {
+    const db = await connection();
+    const user = await db
+      .collection("Account")
+      .findOne({ _id: new ObjectId(id) });
+    return user;
+  } catch (error) {
+    console.error("Error checking login by ID:", error);
+    throw error;
+  }
+}
 
 module.exports = {
   connection,
   register,
   checklogin,
+  checkloginById,
 };

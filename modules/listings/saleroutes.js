@@ -1,35 +1,41 @@
 const express = require("express");
 const router = express.Router();
 const { ObjectId } = require("mongodb");
-
 const model = require("./salefunctions");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
-//ADMIN PAGES
-router.get("/", async (request, response) => {
+// Middleware to make the user object available in all templates
+router.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
+// ADMIN PAGES
+router.get("/", async (req, res) => {
   let properties = await model.getProperties();
-  response.render("sale-admin", {
-    title: "Sale Admin menu ",
+  res.render("sale-admin", {
+    title: "Sale Admin menu",
     listings: properties,
   });
 });
-router.get("/add", async (request, response) => {
+
+router.get("/add", async (req, res) => {
   let properties = await model.getProperties();
-  response.render("sale-add", {
+  res.render("sale-add", {
     title: "Add Sales",
     listings: properties,
   });
 });
-//ADMIN FORM PROCESSING PATHS
-router.post("/add/submit", async (request, response) => {
-  //retrive values from submitted POST form
-  let image = request.body.image;
-  //console.log(wgt);
-  let price = request.body.price;
-  let address = request.body.address;
-  let detailsLink = request.body.detailsLink;
+
+// ADMIN FORM PROCESSING PATHS
+router.post("/add/submit", async (req, res) => {
+  //retrieve values from submitted POST form
+  let image = req.body.image;
+  let price = req.body.price;
+  let address = req.body.address;
+  let detailsLink = req.body.detailsLink;
   let newProperty = {
     image: image,
     price: price,
@@ -37,46 +43,43 @@ router.post("/add/submit", async (request, response) => {
     detailsLink: detailsLink,
   };
   await model.addProperty(newProperty);
-  response.redirect("/admin/sale");
+  res.redirect("/admin/sale");
 });
 
-//Delete
-router.get("/delete", async (request, response) => {
+// Delete
+router.get("/delete", async (req, res) => {
   //get linkId value
-  let id = request.query.propertyId;
+  let id = req.query.propertyId;
   await model.deleteProperty(id);
-  response.redirect("/admin/sale");
+  res.redirect("/admin/sale");
 });
 
-//Edit
-router.get("/edit", async (request, response) => {
-  if (request.query.propertyId) {
-    let PropertyToEdit = await model.getSingleProperty(
-      request.query.propertyId
-    );
+// Edit
+router.get("/edit", async (req, res) => {
+  if (req.query.propertyId) {
+    let PropertyToEdit = await model.getSingleProperty(req.query.propertyId);
     let Properties = await model.getProperties();
-    response.render("sale-edit", {
+    res.render("sale-edit", {
       title: "Edit Sales",
       listing: Properties,
       editProperty: PropertyToEdit,
     });
   } else {
-    response.redirect("/admin/sale");
+    res.redirect("/admin/sale");
   }
 });
-router.post("/edit", async (request, response) => {
-  console.log(ObjectId);
-  let idFilter = { _id: new ObjectId(request.body.propertyId) };
+
+router.post("/edit", async (req, res) => {
+  let idFilter = { _id: new ObjectId(req.body.propertyId) };
   let Properties = {
-    image: request.body.image,
-    price: request.body.price,
-    address: request.body.address,
-    detailsLink: request.body.detailsLink,
+    image: req.body.image,
+    price: req.body.price,
+    address: req.body.address,
+    detailsLink: req.body.detailsLink,
   };
 
   await model.editProperty(idFilter, Properties);
-
-  response.redirect("/admin/sale");
+  res.redirect("/admin/sale");
 });
 
 module.exports = router;

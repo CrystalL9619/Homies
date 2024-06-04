@@ -7,30 +7,37 @@ const model = require("./rentfunctions");
 rentRouter.use(express.urlencoded({ extended: true }));
 rentRouter.use(express.json());
 
-//ADMIN PAGES
-rentRouter.get("/", async (request, response) => {
+// Middleware to make the user object available in all templates
+rentRouter.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
+// ADMIN PAGES
+rentRouter.get("/", async (req, res) => {
   let rents = await model.getRents();
   console.log(rents);
-  response.render("rent-admin", {
-    title: "Administer menu ",
+  res.render("rent-admin", {
+    title: "Administer menu",
     rentals: rents,
   });
 });
-rentRouter.get("/add", async (request, response) => {
+
+rentRouter.get("/add", async (req, res) => {
   let rents = await model.getRents();
-  response.render("rent-add", {
-    title: "Add Rental Prpperties",
+  res.render("rent-add", {
+    title: "Add Rental Properties",
     rentals: rents,
   });
 });
-//ADMIN FORM PROCESSING PATHS
-rentRouter.post("/add/submit", async (request, response) => {
-  //retrive values from submitted POST form
-  let image = request.body.image;
-  //console.log(wgt);
-  let price = request.body.price;
-  let address = request.body.address;
-  let detailsLink = request.body.detailsLink;
+
+// ADMIN FORM PROCESSING PATHS
+rentRouter.post("/add/submit", async (req, res) => {
+  //retrieve values from submitted POST form
+  let image = req.body.image;
+  let price = req.body.price;
+  let address = req.body.address;
+  let detailsLink = req.body.detailsLink;
   let newRent = {
     image: image,
     price: price,
@@ -38,44 +45,44 @@ rentRouter.post("/add/submit", async (request, response) => {
     detailsLink: detailsLink,
   };
   await model.addRent(newRent);
-  response.redirect("/admin/rent");
+  res.redirect("/admin/rent");
 });
 
-//Delete
-rentRouter.get("/delete", async (request, response) => {
+// Delete
+rentRouter.get("/delete", async (req, res) => {
   //get linkId value
-  let id = request.query.rentId;
+  let id = req.query.rentId;
   await model.deleteRent(id);
-  response.redirect("/admin/rent");
+  res.redirect("/admin/rent");
 });
 
-//Edit
-rentRouter.get("/edit", async (request, response) => {
-  if (request.query.rentId) {
-    let RentToEdit = await model.getSingleRent(request.query.rentId);
+// Edit
+rentRouter.get("/edit", async (req, res) => {
+  if (req.query.rentId) {
+    let RentToEdit = await model.getSingleRent(req.query.rentId);
     let Rents = await model.getRents();
-    response.render("rent-edit", {
-      title: "Edit Rental Prpperties",
+    res.render("rent-edit", {
+      title: "Edit Rental Properties",
       rental: Rents,
       editRent: RentToEdit,
     });
   } else {
-    response.redirect("/admin/rent");
+    res.redirect("/admin/rent");
   }
 });
-rentRouter.post("/edit", async (request, response) => {
+
+rentRouter.post("/edit", async (req, res) => {
   console.log(ObjectId);
-  let idFilter = { _id: new ObjectId(request.body.rentId) };
+  let idFilter = { _id: new ObjectId(req.body.rentId) };
   let Rents = {
-    image: request.body.image,
-    price: request.body.price,
-    address: request.body.address,
-    detailsLink: request.body.detailsLink,
+    image: req.body.image,
+    price: req.body.price,
+    address: req.body.address,
+    detailsLink: req.body.detailsLink,
   };
 
   await model.editRent(idFilter, Rents);
-
-  response.redirect("/admin/rent");
+  res.redirect("/admin/rent");
 });
 
 module.exports = rentRouter;

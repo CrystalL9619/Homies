@@ -1,6 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
-const model = require("./userfunctions");
+const model = require("./user");
 function init(passport) {
   passport.use(
     new LocalStrategy(
@@ -34,7 +34,7 @@ function init(passport) {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await model.checklogin(id);
+      const user = await model.checkloginById(id);
       done(null, user);
     } catch (error) {
       done(error);

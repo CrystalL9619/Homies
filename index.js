@@ -28,9 +28,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //SET UP A ROUTE FOR ADMIN
-app.get("/admin", (req, res) => {
-  res.render("admin");
-});
+//app.get("/admin", (req, res) => {
+//res.render("admin");
+//});
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);

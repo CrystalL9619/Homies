@@ -4,7 +4,7 @@ const listings = require("../listings/salefunctions");
 const rentals = require("../listings/rentfunctions");
 pageRouter.use(express.urlencoded({ extended: true }));
 const bcrypt = require("bcrypt");
-const model = require("../pages/userfunctions");
+const model = require("./user");
 pageRouter.use(express.json());
 const passport = require("passport");
 const session = require("express-session");
@@ -13,6 +13,11 @@ const initPassport = require("./passport-config");
 const methodOverride = require("method-override");
 pageRouter.use(methodOverride("_method"));
 const mortgageCalculator = require("./mortgage");
+const {
+  checkNotAuthenticated,
+  checkAuthenticated,
+  isAdmin,
+} = require("./auth");
 
 initPassport(
   passport,
@@ -32,7 +37,7 @@ pageRouter.use(passport.initialize());
 pageRouter.use(passport.session());
 
 pageRouter.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", { user: req.user });
 });
 
 pageRouter.get("/login", checkNotAuthenticated, (req, res) => {
@@ -69,35 +74,33 @@ pageRouter.post(
 );
 pageRouter.get("/sale", async (req, res) => {
   let properties = await listings.getProperties();
-  res.render("sale", { properties });
+  res.render("sale", { properties, user: req.user });
 });
+
 pageRouter.get("/rent", async (req, res) => {
   let rents = await rentals.getRents();
-  res.render("rent", { rents });
+  res.render("rent", { rents, user: req.user });
 });
+
 pageRouter.get("/mortgage", (req, res) => {
-  res.render("mortgage");
+  res.render("mortgage", { user: req.user });
 });
 
 pageRouter.post("/mortgage", (req, res) => {
   const { loanAmount, interestRate, loanTerm } = req.body;
-  mortgageCalculator(loanAmount, interestRate, loanTerm, res);
+  mortgageCalculator(loanAmount, interestRate, loanTerm, res, req);
 });
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect("/");
-  }
-  next();
-}
 pageRouter.delete("/logout", (req, res) => {
-  req.logOut();
-  res.redirect("/login");
+  req.logOut((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/login");
+  });
+});
+
+pageRouter.get("/admin", isAdmin, (req, res) => {
+  res.render("admin", { user: req.user });
 });
 module.exports = pageRouter;

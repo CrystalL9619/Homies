@@ -1,4 +1,10 @@
-async function mortgageCalculator(loanAmount, interestRate, loanTerm, res) {
+async function mortgageCalculator(
+  loanAmount,
+  interestRate,
+  loanTerm,
+  res,
+  req
+) {
   const url = `https://mortgage-monthly-payment-calculator.p.rapidapi.com/revotek-finance/mortgage/monthly-payment?loanAmount=${loanAmount}&interestRate=${interestRate}&terms=${loanTerm}`;
   const options = {
     method: "GET",
@@ -12,7 +18,7 @@ async function mortgageCalculator(loanAmount, interestRate, loanTerm, res) {
     const response = await fetch(url, options);
     if (response.ok) {
       const { monthlyPayment } = await response.json();
-      res.render("mortgage", { monthlyPayment });
+      res.render("mortgage", { monthlyPayment, user: req.user });
       console.log(monthlyPayment);
     } else {
       throw new Error(
@@ -21,7 +27,10 @@ async function mortgageCalculator(loanAmount, interestRate, loanTerm, res) {
     }
   } catch (error) {
     console.error(error);
-    res.render("mortgage", { error: "Failed to calculate monthly payment" });
+    res.render("mortgage", {
+      error: "Failed to calculate monthly payment",
+      user: req.user,
+    });
   }
 }
 
